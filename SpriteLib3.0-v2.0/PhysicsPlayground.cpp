@@ -295,7 +295,7 @@ void PhysicsPlayground::KeyboardHold()
 	{
 		vel += b2Vec2(-50.f, 0.f);
 	}
-	else if (Input::GetKey(Key::LeftArrow))
+	if (Input::GetKey(Key::LeftArrow))
 	{
 		vel += b2Vec2(-50.f, 0.f);
 	}
@@ -304,7 +304,7 @@ void PhysicsPlayground::KeyboardHold()
 	{
 		vel += b2Vec2(50.f, 0.f);
 	}
-	else if (Input::GetKey(Key::RightArrow))
+	if (Input::GetKey(Key::RightArrow))
 	{
 		vel += b2Vec2(50.f, 0.f);
 	}
