@@ -91,13 +91,10 @@ void Player::MovementUpdate()
 	if (m_hasPhysics)
 	{
 		
-		float speed = 10.f;
+		float speed = 8.f;
 		vec3 vel = vec3(0.f, 0.f, 0.f);
 
-		if (Input::GetKey(Key::Shift))
-		{
-			speed *= 7.f;
-		}
+		
 
 #ifdef TOPDOWN
 		if (Input::GetKey(Key::W))
@@ -160,10 +157,12 @@ void Player::MovementUpdate()
 		}
 	}
 
+	
 	if (Input::GetKeyDown(Key::Space))
 	{
 		m_moving = false;
 
+		
 			if (m_hasPhysics)
 			{
 				m_physBody->SetVelocity(vec3());
@@ -171,6 +170,8 @@ void Player::MovementUpdate()
 
 			m_attacking = true;
 			m_locked = true;
+		
+			
 	}
 }
 

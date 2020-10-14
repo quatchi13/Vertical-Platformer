@@ -2,6 +2,7 @@
 #include "Utilities.h"
 
 
+
 PhysicsPlayground::PhysicsPlayground(std::string name)
 	: Scene(name)
 {
@@ -64,41 +65,8 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 	
 
-/*
-	//Setup BOX
-	{
-		
-			//Creates entity
-			auto entity = ECS::CreateEntity();
 
-			//Add components
-			ECS::AttachComponent<Sprite>(entity);
-			ECS::AttachComponent<Transform>(entity);
-			ECS::AttachComponent<PhysicsBody>(entity);
 
-			//Sets up components
-			std::string fileName = "breeks.png";
-			ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 32, 32);
-			ECS::GetComponent<Transform>(entity).SetPosition(vec3(-30.f, -20.f, 2.f));
-
-			auto& tempSpr = ECS::GetComponent<Sprite>(entity);
-			auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
-
-			float shrinkX = 0.f;
-			float shrinkY = 0.f;
-
-			b2Body* tempBody;
-			b2BodyDef tempDef;
-			tempDef.type = b2_dynamicBody;
-			tempDef.position.Set(float32(-30.f), float32(40.f));
-
-			tempBody = m_physicsWorld->CreateBody(&tempDef);
-
-			tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
-			
-		
-	}
-	*/
 
 	
 
@@ -303,23 +271,24 @@ void PhysicsPlayground::KeyboardHold()
 	
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
 
-
 	
-	if (Input::GetKey(Key::Space))
+	if (player.GetVelocity().y == 0)
 	{
-		if (vel == b2Vec2(0.f,0.f)) 
-		{
+		canJump = true;
+	}
+	if (Input::GetKey(Key::Space) && canJump == true)
+	{
 			if (timer < 0.4) {
 				timer += Timer::deltaTime;
 				vel += b2Vec2(0.f, 50.f);
 			}
-		}
 	}
 	else
 	{
-		//canJump = false;
+		canJump = false;
 		timer = 0;
 	}
+	
 
 
 	if (Input::GetKey(Key::A))
