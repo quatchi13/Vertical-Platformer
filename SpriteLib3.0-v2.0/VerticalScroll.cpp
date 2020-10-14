@@ -6,9 +6,9 @@ VerticalScroll::VerticalScroll()
 
 void VerticalScroll::Update()
 {
-	if (m_focus->GetPosition().y > m_cam->m_localPosition.y + m_offset)
+	if (m_focus->GetPosition().y > m_cam->m_localPosition.y + m_offset - 75)
 	{
-		float difference = m_focus->GetPosition().y - (m_cam->m_localPosition.y + m_offset);
+		float difference = m_focus->GetPosition().y - (m_cam->m_localPosition.y + m_offset - 75);
 
 		m_cam->SetPosition(vec3(m_cam->GetPosition().x, m_cam->GetPosition().y + difference, m_cam->GetPosition().z));
 	}
