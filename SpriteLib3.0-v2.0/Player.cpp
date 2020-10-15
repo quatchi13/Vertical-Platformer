@@ -79,7 +79,6 @@ void Player::Update()
 	if (!m_locked)
 	{
 		MovementUpdate();
-		std::cout << m_transform->GetPositionX() << ", " << m_transform->GetPositionY() << ", " << Timer::deltaTime << "\n";
 	}
 
 	AnimationUpdate();
@@ -153,7 +152,6 @@ void Player::MovementUpdate()
 		if (Input::GetKey(Key::D))
 		{
 			m_transform->SetPositionX(m_transform->GetPositionX() + (speed * Timer::deltaTime));
-			
 			m_facing = RIGHT;
 			m_moving = true;
 		}
