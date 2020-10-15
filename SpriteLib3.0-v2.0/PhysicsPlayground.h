@@ -15,6 +15,7 @@ public:
 	bool inAir = false;
 	bool isMoveing = false;
 	float speed = 0;
+	float additionalSpeed = 0;
 	//Input overrides
 	void KeyboardHold() override;
 	void KeyboardDown() override;
