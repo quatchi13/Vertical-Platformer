@@ -46,7 +46,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 
-	//Setup background Entity
+	//Setup SKY background Entity
 	{
 		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
@@ -59,7 +59,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		//Set up the components
 		std::string fileName = "sky.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 250, 800);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 250, 950);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 290.f, 0.f));
 	}
@@ -70,7 +70,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	
 
-	//Setup static BOX
+	//Setup static GROUND
 	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -135,10 +135,11 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	makePlatform(10, 595, 4);//18th right ish 
 	makePlatform(40, 595, 4);//18th right more ish
 	makePlatform(70, 595, 4);//18th right more more right ish
+	makePlatform(100, 630, 24);//19th right to the wall where CAKE :O
 
-	//Setup static BOX
+	//Setup static BREEK
 	{
-		int boxNumber = 24;
+		int boxNumber = 26;
 		int wallHeight = 0;
 		for (; boxNumber > 0; boxNumber--)
 		{
@@ -172,9 +173,9 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		}
 		
 	}
-	//Setup static BOX
+	//Setup static BREEK
 	{
-		int boxNumber = 24;
+		int boxNumber = 26;
 		int wallHeight = 0;
 		for (; boxNumber > 0; boxNumber--)
 		{
@@ -207,6 +208,60 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 			wallHeight += 32;
 		}
 
+	}
+
+	//Setup static BREEK
+	{
+		int boxNumber = 10;
+		int wallHeight = 0;
+		for (; boxNumber > 0; boxNumber--)
+		{
+			//Creates entity
+			auto entity = ECS::CreateEntity();
+
+			//Add components
+			ECS::AttachComponent<Sprite>(entity);
+			ECS::AttachComponent<Transform>(entity);
+			ECS::AttachComponent<PhysicsBody>(entity);
+
+			//Sets up components
+			std::string fileName = "breeks.png";
+			ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 32, 32);
+			ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+			auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+			auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+			float shrinkX = 0.f;
+			float shrinkY = 0.f;
+			b2Body* tempBody;
+			b2BodyDef tempDef;
+			tempDef.type = b2_staticBody;
+			tempDef.position.Set(float32(wallHeight + -103.f), float32( 764.f));
+
+			tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+			tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+			wallHeight += 32;
+		}
+
+	}
+	//Setup static CAKE
+	{
+		/*Scene::CreateSprite(m_sceneReg, "CAKE.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "CAKE.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 641.f, 1.f));
 	}
 
 	//SLOOM entity
