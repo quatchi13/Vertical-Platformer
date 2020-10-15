@@ -11,7 +11,8 @@ public:
 
 	void Update() override;
 	float timer = 0;
-	bool canJump = true;
+	bool canJump = false;
+	bool inAir = false;
 	//Input overrides
 	void KeyboardHold() override;
 	void KeyboardDown() override;

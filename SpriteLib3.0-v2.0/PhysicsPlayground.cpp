@@ -275,25 +275,38 @@ void PhysicsPlayground::KeyboardHold()
 	if (player.GetVelocity().y == 0)
 	{
 		canJump = true;
+		inAir = false;
 	}
 	if (Input::GetKey(Key::Space) && canJump == true)
 	{
+			
 			if (timer < 0.4) {
 				timer += Timer::deltaTime;
-				vel += b2Vec2(0.f, 50.f);
+				vel += b2Vec2(0.f, 70);
 			}
+		
 	}
 	else
 	{
+		inAir = true;
 		canJump = false;
 		timer = 0;
+		
 	}
 	
 
 
 	if (Input::GetKey(Key::A))
 	{
-		vel += b2Vec2(-50.f, 0.f);
+		if (inAir)
+		{
+			vel += b2Vec2(-50.f, -15.f);
+		}
+		else
+		{
+			vel += b2Vec2(-50.f, 0.f);
+		}
+		
 	}
 	if (Input::GetKey(Key::LeftArrow))
 	{
@@ -302,7 +315,14 @@ void PhysicsPlayground::KeyboardHold()
 
 	if (Input::GetKey(Key::D))
 	{
-		vel += b2Vec2(50.f, 0.f);
+		if (inAir)
+		{
+			vel += b2Vec2(50.f, -15.f);
+		}
+		else
+		{
+			vel += b2Vec2(50.f, 0.f);
+		}
 	}
 	if (Input::GetKey(Key::RightArrow))
 	{
