@@ -285,7 +285,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 2.f));
 		ECS::GetComponent<Player>(entity).InitPlayer(filename, animations, 16, 16, &ECS::GetComponent<Sprite>(entity), &ECS::GetComponent<AnimationController>(entity), &ECS::GetComponent<Transform>(entity));
-
+		
 
 		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
 		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
@@ -360,6 +360,7 @@ void PhysicsPlayground::KeyboardHold()
 		else
 		{
 			vel += b2Vec2(-50.f, 0.f);
+			
 		}
 		
 	}
