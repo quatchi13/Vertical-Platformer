@@ -76,9 +76,13 @@ void Player::InitPlayer(std::string& fileName, std::string& animationJSON, int w
 
 void Player::Update()
 {
+	
 	if (!m_locked)
 	{
 		MovementUpdate();
+		//std::cout << m_transform->GetPositionX() - lastPos << ", " << m_transform->GetPositionY() << ", " << timePassed << "\n";
+		timePassed += Timer::deltaTime;
+		//lastPos = m_transform->GetPositionX();
 	}
 
 	AnimationUpdate();
@@ -90,42 +94,47 @@ void Player::MovementUpdate()
 
 	if (m_hasPhysics)
 	{
-		
-		float speed = 8.f;
-		vec3 vel = vec3(0.f, 0.f, 0.f);
 
 		
+		
+			float speed = 8.f;
+
+
+			vec3 vel = vec3(0.f, 0.f, 0.f);
+
+
 
 #ifdef TOPDOWN
-		if (Input::GetKey(Key::W))
-		{
-			vel = vel + vec3(0.f, 1.f, 0.f);
-			m_facing = UP;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::S))
-		{
-			vel = vel + vec3(0.f, -1.f, 0.f);
-			m_facing = DOWN;
-			m_moving = true;
-		}
+			if (Input::GetKey(Key::W))
+			{
+				vel = vel + vec3(0.f, 1.f, 0.f);
+				m_facing = UP;
+				m_moving = true;
+			}
+			if (Input::GetKey(Key::S))
+			{
+				vel = vel + vec3(0.f, -1.f, 0.f);
+				m_facing = DOWN;
+				m_moving = true;
+			}
 #endif
-		if (Input::GetKey(Key::A))
-		{
-			vel = vel + vec3(-1.f, 0.f, 0.f);
-			m_facing = LEFT;
-			m_moving = true;
-		}
-		if (Input::GetKey(Key::D))
-		{
-			vel = vel + vec3(1.f, 0.f, 0.f);
-			m_facing = RIGHT;
-			m_moving = true;
-		}
+			if (Input::GetKey(Key::A))
+			{
+				vel = vel + vec3(-1.f, 0.f, 0.f);
+				m_facing = LEFT;
+				m_moving = true;
+			}
+			if (Input::GetKey(Key::D))
+			{
+				vel = vel + vec3(1.f, 0.f, 0.f);
+				m_facing = RIGHT;
+				m_moving = true;
+			}
 
-		m_physBody->SetVelocity(vel*speed);
+			m_physBody->SetVelocity(vel * speed);
+
+		
 	}
-
 	else {
 		//regular movement
 		float speed = 15.f;

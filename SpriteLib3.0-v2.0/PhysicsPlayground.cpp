@@ -322,7 +322,7 @@ void PhysicsPlayground::Update()
 void PhysicsPlayground::KeyboardHold()
 {
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	float speed = 10.f;
+	isMoveing = false;
 	
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
 
@@ -334,7 +334,7 @@ void PhysicsPlayground::KeyboardHold()
 	}
 	if (Input::GetKey(Key::Space) && canJump == true)
 	{
-			
+		isMoveing = true;
 			if (timer < 0.4) {
 				timer += Timer::deltaTime;
 				vel += b2Vec2(0.f, 70);
@@ -353,6 +353,7 @@ void PhysicsPlayground::KeyboardHold()
 
 	if (Input::GetKey(Key::A))
 	{
+		isMoveing = true;
 		if (inAir)
 		{
 			vel += b2Vec2(-50.f, -15.f);
@@ -365,11 +366,13 @@ void PhysicsPlayground::KeyboardHold()
 	}
 	if (Input::GetKey(Key::LeftArrow))
 	{
+		isMoveing = true;
 		vel += b2Vec2(-50.f, 0.f);
 	}
 
 	if (Input::GetKey(Key::D))
 	{
+		isMoveing = true;
 		if (inAir)
 		{
 			vel += b2Vec2(50.f, -15.f);
@@ -381,7 +384,25 @@ void PhysicsPlayground::KeyboardHold()
 	}
 	if (Input::GetKey(Key::RightArrow))
 	{
+		isMoveing = true;
 		vel += b2Vec2(50.f, 0.f);
+	}
+
+	if (isMoveing)
+	{
+		speed++;
+	}
+	else
+	{
+		speed--;
+	}
+	if (speed > 8)
+	{
+		speed = 8;
+	}
+	if (speed < 0)
+	{
+		speed = 0;
 	}
 
 	player.GetBody()->SetLinearVelocity(speed * vel);

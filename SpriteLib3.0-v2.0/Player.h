@@ -84,6 +84,9 @@ private:
 	bool m_attacking = false;
 	//Have we locked the player from moving during this animation?
 	bool m_locked = false;
+	double timePassed = 0;
+	double lastPos = 0;
+
 
 	//A reference to our sprite
 	Sprite* m_sprite = nullptr;
