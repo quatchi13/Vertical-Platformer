@@ -101,7 +101,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		std::string fileName = "Win.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
 		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(85.f, 75.f, 4.f));
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 700.f, 4.f));
 	}
 
 
