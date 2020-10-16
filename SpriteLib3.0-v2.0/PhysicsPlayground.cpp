@@ -72,7 +72,23 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(85.f, 75.f, 4.f));
 	}
 	
-	
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::SetIsGraphTwo(entity, true);
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Speed Graphs 2.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(85.f, 75.f, 4.f));
+	}
+
+
 	makeImage("Speed Graphs 1.png", 100, 60, 85.f, 75.f, 4.f, 0.f);
 
 
@@ -291,7 +307,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		tempDef.angle = Transform::ToRadians(0.f);
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
-
+		std::cout << "sdfgsdfgs" << tempSpr.GetWidth() - shrinkX;
 		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetFixedRotation(true);
@@ -418,7 +434,11 @@ void PhysicsPlayground::KeyboardHold()
 		}
 
 		timerTwo += Timer::deltaTime;
-		//std::cout << speed << ", " << timerTwo << "\n";
+		auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphOne());
+		if (image.GetTransparency() == 1.f)
+		{
+			std::cout << speed << ", " << timerTwo << "\n";
+		}
 		player.GetBody()->SetLinearVelocity(speed * vel);
 		//spare comment
 
@@ -798,9 +818,14 @@ void PhysicsPlayground::KeyboardHold()
 			}
 	
 		}
-	
+			
 		timerTwo += Timer::deltaTime;
-		std::cout << speed << ", " << timerTwo << "\n";
+		auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphTwo());
+		if (image.GetTransparency() == 1.f) 
+		{
+			std::cout << speed << ", " << timerTwo << "\n";
+		}
+		
 		player.GetBody()->SetLinearVelocity(speed * vel);
 		//spare comment
 	
@@ -810,15 +835,32 @@ void PhysicsPlayground::KeyboardHold()
 
 void PhysicsPlayground::KeyboardDown()
 {
-	auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphOne());
 	if (Input::GetKeyDown(Key::G))
 	{
+		if (physMove)
+		{
+			auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphOne());
 			image.SetTransparency(1.f);
+		}
+		if (physMove == false)
+		{
+			auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphTwo());
+			image.SetTransparency(1.f);
+		}
 	}
 
 	if (Input::GetKeyDown(Key::H))
 	{
+		if (physMove)
+		{
+			auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphOne());
 			image.SetTransparency(0.f);
+		}
+		if (physMove == false)
+		{
+			auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphTwo());
+			image.SetTransparency(0.f);
+		}
 	}
 
 	if (Input::GetKeyDown(Key::I))
@@ -830,6 +872,16 @@ void PhysicsPlayground::KeyboardDown()
 	{
 		physMove = false;
 	}
+	/*auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphTwo());
+	if (Input::GetKeyDown(Key::G))
+	{
+		image.SetTransparency(1.f);
+	}
+
+	if (Input::GetKeyDown(Key::H))
+	{
+		image.SetTransparency(0.f);
+	}*/
 }
 
 void PhysicsPlayground::KeyboardUp()
