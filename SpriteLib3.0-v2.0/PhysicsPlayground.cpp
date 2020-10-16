@@ -88,6 +88,22 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(85.f, 75.f, 4.f));
 	}
 
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+		ECS::SetIsWin(entity, true);
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+
+		//Set up the components
+		std::string fileName = "Win.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(85.f, 75.f, 4.f));
+	}
+
 
 	makeImage("Speed Graphs 1.png", 100, 60, 85.f, 75.f, 4.f, 0.f);
 
@@ -435,6 +451,11 @@ void PhysicsPlayground::KeyboardHold()
 
 		timerTwo += Timer::deltaTime;
 		auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphOne());
+		auto& win = ECS::GetComponent<Sprite>(MainEntities::Win());
+		if (player.GetPosition().y >= 626 && player.GetPosition().y <= 640 && player.GetPosition().x >= 76 && player.GetPosition().x <= 124)
+		{
+			win.SetTransparency(1.f);
+		}
 		if (image.GetTransparency() == 1.f)
 		{
 			std::cout << speed << ", " << timerTwo << "\n";

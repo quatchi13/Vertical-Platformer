@@ -51,6 +51,7 @@ public:
 	static void SetIsMainPlayer(unsigned entity, bool mainPlayer);
 	static void SetIsGraphOne(unsigned entity, bool graphOne);
 	static void SetIsGraphTwo(unsigned entity, bool graphTwo);
+	static void SetIsWin(unsigned entity, bool win);
 
 private:
 	static entt::registry* m_reg;

@@ -4,6 +4,7 @@ int MainEntities::m_mainCamera = 0;
 int MainEntities::m_mainPlayer = 0;
 int MainEntities::m_graphOne = 0;
 int MainEntities::m_graphTwo = 0;
+int MainEntities::m_win = 0;
 
 int MainEntities::MainCamera()
 {
@@ -25,6 +26,11 @@ int MainEntities::GraphTwo()
 	return m_graphTwo;
 }
 
+int MainEntities::Win()
+{
+	return m_win;
+}
+
 void MainEntities::MainCamera(int main)
 {
 	m_mainCamera = main;
@@ -43,4 +49,9 @@ void MainEntities::GraphOne(int main)
 void MainEntities::GraphTwo(int main)
 {
 	m_graphTwo = main;
+}
+
+void MainEntities::Win(int main)
+{
+	m_win = main;
 }

@@ -63,3 +63,11 @@ void ECS::SetIsGraphTwo(unsigned entity, bool graphTwo)
 		MainEntities::GraphTwo(entity);
 	}
 }
+
+void ECS::SetIsWin(unsigned entity, bool win)
+{
+	if (win)
+	{
+		MainEntities::Win(entity);
+	}
+}
