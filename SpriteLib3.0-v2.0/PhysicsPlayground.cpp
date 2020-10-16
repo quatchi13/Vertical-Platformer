@@ -314,121 +314,498 @@ void PhysicsPlayground::KeyboardHold()
 {
 	auto& phys = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	
 	isMoveing = false;
 	
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
 
-	
-	if (player.GetVelocity().y == 0)
+	if (physMove)
 	{
-		canJump = true;
-		inAir = false;
-	}
-	if (Input::GetKey(Key::Space) && canJump == true)
-	{
-		isMoveing = true;
+		if (player.GetVelocity().y == 0)
+		{
+			canJump = true;
+			inAir = false;
+		}
+		if (Input::GetKey(Key::Space) && canJump == true)
+		{
+			isMoveing = true;
 			if (timer < 0.4) {
 				timer += Timer::deltaTime;
 				vel += b2Vec2(0.f, 70);
 			}
-		
-	}
-	else
-	{
-		inAir = true;
-		canJump = false;
-		timer = 0;
-		
-	}
-	
 
-
-	if (Input::GetKey(Key::A))
-	{
-		isMoveing = true;
-		if (inAir)
-		{
-			vel += b2Vec2(-50.f, -15.f);
 		}
 		else
 		{
+			inAir = true;
+			canJump = false;
+			timer = 0;
+
+		}
+
+
+
+		if (Input::GetKey(Key::A))
+		{
+			isMoveing = true;
+			if (inAir)
+			{
+				vel += b2Vec2(-50.f, -15.f);
+			}
+			else
+			{
+				vel += b2Vec2(-50.f, 0.f);
+			}
+
+		}
+		if (Input::GetKey(Key::LeftArrow))
+		{
+			isMoveing = true;
 			vel += b2Vec2(-50.f, 0.f);
 		}
-		
-	}
-	if (Input::GetKey(Key::LeftArrow))
-	{
-		isMoveing = true;
-		vel += b2Vec2(-50.f, 0.f);
-	}
 
-	if (Input::GetKey(Key::D))
-	{
-		isMoveing = true;
-		if (inAir)
+		if (Input::GetKey(Key::D))
 		{
-			vel += b2Vec2(50.f, -15.f);
+			isMoveing = true;
+			if (inAir)
+			{
+				vel += b2Vec2(50.f, -15.f);
+			}
+			else
+			{
+				vel += b2Vec2(50.f, 0.f);
+			}
+		}
+		if (Input::GetKey(Key::RightArrow))
+		{
+			isMoveing = true;
+			vel += b2Vec2(50.f, 0.f);
+		}
+
+
+
+		if (isMoveing)
+		{
+			additionalSpeed += 1;
+			if (additionalSpeed < 5)
+			{
+				speed = sqrt(additionalSpeed);
+			}
+			if (additionalSpeed > 15)
+			{
+
+				speed = pow(speed, 1.5);
+			}
+			if (speed > 25)
+			{
+				speed = 25;
+			}
+			if (speed < 0)
+			{
+				speed = 0;
+			}
+
 		}
 		else
 		{
-			vel += b2Vec2(50.f, 0.f);
-		}
-	}
-	if (Input::GetKey(Key::RightArrow))
-	{
-		isMoveing = true;
-		vel += b2Vec2(50.f, 0.f);
-	}
+			additionalSpeed = 0;
+			speed -= 10;
+			if (speed < 0)
+			{
+				speed = 0;
+			}
 
-
-
-	if (isMoveing)
-	{
-		additionalSpeed+= 1;
-		if (additionalSpeed < 5)
-		{
-			speed = sqrt(additionalSpeed);
-		}
-		if (additionalSpeed > 15)
-		{
-			
-			speed = pow(speed, 1.5);
-		}
-		if (speed > 25)
-		{
-			speed = 25;
-		}
-		if (speed < 0)
-		{
-			speed = 0;
 		}
 
+		timerTwo += Timer::deltaTime;
+		//std::cout << speed << ", " << timerTwo << "\n";
+		player.GetBody()->SetLinearVelocity(speed * vel);
+		//spare comment
+
+		
 	}
 	else
 	{
-		additionalSpeed = 0;
-		speed-= 10;
-		if(speed < 0)
+		if (player.GetVelocity().y == 0)
 		{
-			speed = 0;
+			canJump = true;
+			inAir = false;
 		}
+		if (Input::GetKey(Key::Space) && canJump == true)
+		{
+			isMoveing = true;
+			if (timer < 0.4) {
+				timer += Timer::deltaTime;
+				counter++;
+				player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, player.GetPosition().y + speed * Timer::deltaTime), 0);
+				if (player.GetPosition().y >= -4 && player.GetPosition().y <= 4 && player.GetPosition().x >= -50 && player.GetPosition().x <= 50)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, -6.5), 0);
+				}
+				if (player.GetPosition().y >= 31 && player.GetPosition().y <= 39 && player.GetPosition().x >= -112 && player.GetPosition().x <= -32)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 28.5), 0);
+				}
+				if (player.GetPosition().y >= 31 && player.GetPosition().y <= 39 && player.GetPosition().x >= 32 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 28.5), 0);
+				}
+				if (player.GetPosition().y >= 66 && player.GetPosition().y <= 74 && player.GetPosition().x >= -40 && player.GetPosition().x <= 40)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 67.5), 0);
+				}
+				if (player.GetPosition().y >= 101 && player.GetPosition().y <= 109 && player.GetPosition().x >= -97 && player.GetPosition().x <= -47)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 102.5), 0);
+				}
+				if (player.GetPosition().y >= 136 && player.GetPosition().y <= 144 && player.GetPosition().x >= -25 && player.GetPosition().x <= 25)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 137.5), 0);
+				}
+				if (player.GetPosition().y >= 171 && player.GetPosition().y <= 179 && player.GetPosition().x >= 47 && player.GetPosition().x <= 97)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 178.5), 0);
+				}
+				if (player.GetPosition().y >= 206 && player.GetPosition().y <= 214 && player.GetPosition().x >= -35 && player.GetPosition().x <= 15)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 207.5), 0);
+				}
+				if (player.GetPosition().y >= 241 && player.GetPosition().y <= 249 && player.GetPosition().x >= -112 && player.GetPosition().x <= -62)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 242.5), 0);
+				}
+				if (player.GetPosition().y >= 276 && player.GetPosition().y <= 284 && player.GetPosition().x >= -42.5 && player.GetPosition().x <= -17.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 277.5), 0);
+				}
+				if (player.GetPosition().y >= 311 && player.GetPosition().y <= 319 && player.GetPosition().x >= -82.5 && player.GetPosition().x <= -57.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 312.5), 0);
+				}
+				if (player.GetPosition().y >= 346 && player.GetPosition().y <= 354 && player.GetPosition().x >= -32.5 && player.GetPosition().x <= -7.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 347.5), 0);
+				}
+				if (player.GetPosition().y >= 381 && player.GetPosition().y <= 389 && player.GetPosition().x >= -22.5 && player.GetPosition().x <= 2.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 382.5), 0);
+				}
+				if (player.GetPosition().y >= 416 && player.GetPosition().y <= 424 && player.GetPosition().x >= -12.5 && player.GetPosition().x <= 12.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 417.5), 0);
+				}
+				if (player.GetPosition().y >= 451 && player.GetPosition().y <= 459 && player.GetPosition().x >= -2.5 && player.GetPosition().x <= 22.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 452.5), 0);
+				}
+				if (player.GetPosition().y >= 346 && player.GetPosition().y <= 354 && player.GetPosition().x >= 69 && player.GetPosition().x <= 81)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 347.5), 0);
+				}
+				if (player.GetPosition().y >= 381 && player.GetPosition().y <= 389 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 382.5), 0);
+				}
+				if (player.GetPosition().y >= 416 && player.GetPosition().y <= 424 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 417.5), 0);
+				}
+				if (player.GetPosition().y >= 451 && player.GetPosition().y <= 459 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 452.5), 0);
+				}
+				if (player.GetPosition().y >= 486 && player.GetPosition().y <= 494 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 487.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 522.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= 56 && player.GetPosition().x <= 64)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 522.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= 16 && player.GetPosition().x <= 24)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 522.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= -24 && player.GetPosition().x <= -16)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 522.5), 0);
+				}
+				if (player.GetPosition().y >= 486 && player.GetPosition().y <= 494 && player.GetPosition().x >= -79 && player.GetPosition().x <= -71)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 487.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= -112 && player.GetPosition().x <= -104)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 522.5), 0);
+				}
+				if (player.GetPosition().y >= 556 && player.GetPosition().y <= 564 && player.GetPosition().x >= -77 && player.GetPosition().x <= -73)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 557.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= -52 && player.GetPosition().x <= -48)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 592.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= 8 && player.GetPosition().x <= 12)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 592.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= 38 && player.GetPosition().x <= 42)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 592.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= 68 && player.GetPosition().x <= 72)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 592.5), 0);
+				}
+				if (player.GetPosition().y >= 626 && player.GetPosition().y <= 634 && player.GetPosition().x >= 76 && player.GetPosition().x <= 124)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 627.5), 0);
+				}
+				
+			}
+	
+		}
+		else
+		{
+			if (counter > 0)
+			{
+				
+				player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, player.GetPosition().y - 1.25), 0);
+				counter--;
+				if (player.GetPosition().y < -20)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, -20), 0);
+					counter = 0;
+				}
+				if (player.GetPosition().y >= -4 && player.GetPosition().y <= 4 && player.GetPosition().x >= -50 && player.GetPosition().x <= 50)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 6.5), 0);
+				}
+				if (player.GetPosition().y >= 31 && player.GetPosition().y <= 39 && player.GetPosition().x >= -112 && player.GetPosition().x <= -32)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 41.5), 0);
+				}
+				if (player.GetPosition().y >= 31 && player.GetPosition().y <= 39 && player.GetPosition().x >= 32 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 41.5), 0);
+				}
+				if (player.GetPosition().y >= 66 && player.GetPosition().y <= 74 && player.GetPosition().x >= -40 && player.GetPosition().x <= 40)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 76.5), 0);
+				}
+				if (player.GetPosition().y >= 101 && player.GetPosition().y <= 109 && player.GetPosition().x >= -97 && player.GetPosition().x <= -47)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 111.5), 0);
+				}
+				if (player.GetPosition().y >= 136 && player.GetPosition().y <= 144 && player.GetPosition().x >= -25 && player.GetPosition().x <= 25)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 146.5), 0);
+				}
+				if (player.GetPosition().y >= 171 && player.GetPosition().y <= 179 && player.GetPosition().x >= 47 && player.GetPosition().x <= 97)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 181.5), 0);
+				}
+				if (player.GetPosition().y >= 206 && player.GetPosition().y <= 214 && player.GetPosition().x >= -35 && player.GetPosition().x <= 15)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 216.5), 0);
+				}
+				if (player.GetPosition().y >= 241 && player.GetPosition().y <= 249 && player.GetPosition().x >= -112 && player.GetPosition().x <= -62)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 251.5), 0);
+				}
+				if (player.GetPosition().y >= 276 && player.GetPosition().y <= 284 && player.GetPosition().x >= -42.5 && player.GetPosition().x <= -17.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 286.5), 0);
+				}
+				if (player.GetPosition().y >= 311 && player.GetPosition().y <= 319 && player.GetPosition().x >= -82.5 && player.GetPosition().x <= -57.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 321.5), 0);
+				}
+				if (player.GetPosition().y >= 346 && player.GetPosition().y <= 354 && player.GetPosition().x >= -32.5 && player.GetPosition().x <= -7.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 356.5), 0);
+				}
+				if (player.GetPosition().y >= 381 && player.GetPosition().y <= 389 && player.GetPosition().x >= -22.5 && player.GetPosition().x <= 2.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 391.5), 0);
+				}
+				if (player.GetPosition().y >= 416 && player.GetPosition().y <= 424 && player.GetPosition().x >= -12.5 && player.GetPosition().x <= 12.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 426.5), 0);
+				}
+				if (player.GetPosition().y >= 451 && player.GetPosition().y <= 459 && player.GetPosition().x >= -2.5 && player.GetPosition().x <= 22.5)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 461.5), 0);
+				}
+				if (player.GetPosition().y >= 346 && player.GetPosition().y <= 354 && player.GetPosition().x >= 69 && player.GetPosition().x <= 81)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 356.5), 0);
+				}
+				if (player.GetPosition().y >= 381 && player.GetPosition().y <= 389 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 391.5), 0);
+				}
+				if (player.GetPosition().y >= 416 && player.GetPosition().y <= 424 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 426.5), 0);
+				}
+				if (player.GetPosition().y >= 451 && player.GetPosition().y <= 459 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 461.5), 0);
+				}
+				if (player.GetPosition().y >= 486 && player.GetPosition().y <= 494 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 496.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= 100 && player.GetPosition().x <= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 531.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= 56 && player.GetPosition().x <= 64)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 531.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= 16 && player.GetPosition().x <= 24)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 531.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= -24 && player.GetPosition().x <= -16)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 531.5), 0);
+				}
+				if (player.GetPosition().y >= 486 && player.GetPosition().y <= 494 && player.GetPosition().x >= -79 && player.GetPosition().x <= -71)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 496.5), 0);
+				}
+				if (player.GetPosition().y >= 521 && player.GetPosition().y <= 529 && player.GetPosition().x >= -112 && player.GetPosition().x <= -104)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 531.5), 0);
+				}
+				if (player.GetPosition().y >= 556 && player.GetPosition().y <= 564 && player.GetPosition().x >= -77 && player.GetPosition().x <= -73)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 566.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= -52 && player.GetPosition().x <= -48)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 601.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= 8 && player.GetPosition().x <= 12)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 601.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= 38 && player.GetPosition().x <= 42)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 601.5), 0);
+				}
+				if (player.GetPosition().y >= 591 && player.GetPosition().y <= 599 && player.GetPosition().x >= 68 && player.GetPosition().x <= 72)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 601.5), 0);
+				}
+				if (player.GetPosition().y >= 626 && player.GetPosition().y <= 634 && player.GetPosition().x >= 76 && player.GetPosition().x <= 124)
+				{
+					player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x, 636.5), 0);
+				}
+			}
+			
+			inAir = true;
+			canJump = false;
+			timer = 0;
+	
+		}
+	
+	
+	
+		if (Input::GetKey(Key::A))
+		{
+			isMoveing = true;
+			if (inAir)
+			{
+				player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x - speed * Timer::deltaTime, player.GetPosition().y), 0);
+				if (player.GetPosition().x <= -106)
+				{
+					player.GetBody()->SetTransform(b2Vec2(-104, player.GetPosition().y), 0);
+				}
 
+			}
+			else
+			{
+				player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x - speed * Timer::deltaTime, player.GetPosition().y), 0);
+				if (player.GetPosition().x <= -106)
+				{
+					player.GetBody()->SetTransform(b2Vec2(-104, player.GetPosition().y), 0);
+				}
+			}
+	
+		}
+		if (Input::GetKey(Key::LeftArrow))
+		{
+			isMoveing = true;
+			vel += b2Vec2(-50.f, 0.f);
+		}
+	
+		if (Input::GetKey(Key::D))
+		{
+			isMoveing = true;
+			if (inAir)
+			{
+				player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x + speed * Timer::deltaTime, player.GetPosition().y), 0);
+				if (player.GetPosition().x >= 106)
+				{
+					player.GetBody()->SetTransform(b2Vec2(104, player.GetPosition().y), 0);
+				}
+			}
+			else
+			{
+				player.GetBody()->SetTransform(b2Vec2(player.GetPosition().x + speed * Timer::deltaTime, player.GetPosition().y), 0);
+				if (player.GetPosition().x >= 112)
+				{
+					player.GetBody()->SetTransform(b2Vec2(104, player.GetPosition().y), 0);
+				}
+			}
+		}
+		if (Input::GetKey(Key::RightArrow))
+		{
+			isMoveing = true;
+			vel += b2Vec2(50.f, 0.f);
+		}
+	
+	
+	
+		if (isMoveing)
+		{
+			speed+= 10;
+			if (speed > 100)
+			{
+				speed = 100;
+			}
+			if (speed < 0)
+			{
+				speed = 0;
+			}
+	
+		}
+		else
+		{
+			speed -= 20;
+			if (speed < 0)
+			{
+				speed = 0;
+			}
+	
+		}
+	
+		timerTwo += Timer::deltaTime;
+		std::cout << speed << ", " << timerTwo << "\n";
+		player.GetBody()->SetLinearVelocity(speed * vel);
+		//spare comment
+	
 	}
 	
-	timerTwo += Timer::deltaTime;
-	//std::cout << speed << ", " << timerTwo << "\n";
-	player.GetBody()->SetLinearVelocity(speed * vel);
-	//spare comment
-
-	if (Input::GetKey(Key::M))
-	{
-		phys.SetPhysicsState(false);
-	}
-
-	if (Input::GetKey(Key::P))
-	{
-		phys.SetPhysicsState(true);
-	}
 }
 
 void PhysicsPlayground::KeyboardDown()
@@ -442,6 +819,16 @@ void PhysicsPlayground::KeyboardDown()
 	if (Input::GetKeyDown(Key::H))
 	{
 			image.SetTransparency(0.f);
+	}
+
+	if (Input::GetKeyDown(Key::I))
+	{
+		physMove = true;
+	}
+
+	if (Input::GetKeyDown(Key::O))
+	{
+		physMove = false;
 	}
 }
 

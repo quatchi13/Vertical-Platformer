@@ -12,9 +12,11 @@ public:
 	void Update() override;
 	float timer = 0;
 	float timerTwo = 0;
+	float counter = 0;
 	bool canJump = false;
 	bool inAir = false;
 	bool isMoveing = false;
+	bool physMove = true;
 	float speed = 0;
 	float additionalSpeed = 0;
 	bool showGraph1 = true;
