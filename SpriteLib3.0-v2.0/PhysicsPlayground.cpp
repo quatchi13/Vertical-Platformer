@@ -391,34 +391,39 @@ void PhysicsPlayground::KeyboardHold()
 
 	if (isMoveing)
 	{
-		speed+= 1;
-		if (speed < 11)
+		additionalSpeed+= 1;
+		if (additionalSpeed < 5)
 		{
-			additionalSpeed = pow(speed, 0.5);
+			speed = sqrt(additionalSpeed);
 		}
-		else if (speed > 10 && speed < 15)
+		if (additionalSpeed > 15)
 		{
-			additionalSpeed = pow(speed, 3);
+			
+			speed = pow(speed, 1.5);
+		}
+		if (speed > 25)
+		{
+			speed = 25;
+		}
+		if (speed < 0)
+		{
+			speed = 0;
 		}
 
 	}
 	else
 	{
 		additionalSpeed = 0;
-		speed-= 3;
+		speed-= 10;
+		if(speed < 0)
+		{
+			speed = 0;
+		}
 
 	}
-	speed += additionalSpeed;
-	if (speed > 15)
-	{
-		speed = 15;
-	}
-	if (speed < 0)
-	{
-		speed = 0;
-	}
-
-	std::cout << speed << "," << Timer::deltaTime << "\n";
+	
+	timerTwo += Timer::deltaTime;
+	std::cout << speed << ", " << timerTwo << "\n";
 	player.GetBody()->SetLinearVelocity(speed * vel);
 	//spare comment
 }

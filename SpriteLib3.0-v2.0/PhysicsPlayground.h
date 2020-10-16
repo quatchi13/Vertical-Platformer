@@ -11,6 +11,7 @@ public:
 
 	void Update() override;
 	float timer = 0;
+	float timerTwo = 0;
 	bool canJump = false;
 	bool inAir = false;
 	bool isMoveing = false;
