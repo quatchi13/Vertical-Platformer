@@ -47,3 +47,19 @@ void ECS::SetIsMainPlayer(unsigned entity, bool mainPlayer)
 		MainEntities::MainPlayer(entity);
 	}
 }
+
+void ECS::SetIsGraphOne(unsigned entity, bool graphOne)
+{
+	if (graphOne)
+	{
+		MainEntities::GraphOne(entity);
+	}
+}
+
+void ECS::SetIsGraphTwo(unsigned entity, bool graphTwo)
+{
+	if (graphTwo)
+	{
+		MainEntities::GraphTwo(entity);
+	}
+}

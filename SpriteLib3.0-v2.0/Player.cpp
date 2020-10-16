@@ -221,6 +221,17 @@ void Player::AnimationUpdate()
 
 }
 
+void Player::SetPhysicsState(int physics)
+{
+	m_hasPhysics = physics;
+}
+
+int Player::GetPhysicsState()
+{
+
+	return m_hasPhysics;
+}
+
 void Player::SetActiveAnimation(int anim)
 {
 	m_animController->SetActiveAnim(anim);

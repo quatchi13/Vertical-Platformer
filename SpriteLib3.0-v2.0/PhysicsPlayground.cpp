@@ -1,6 +1,7 @@
 #include "PhysicsPlayground.h"
 #include "Utilities.h"
 #include "Math.h"
+#include "Player.h"
 
 
 
@@ -22,6 +23,7 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
+	
 
 	//Setup MainCamera Entity
 	{
@@ -48,28 +50,32 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 	}
 
 	//Setup SKY background Entity
-	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+	
+	makeImage("sky.png", 250, 950, 0.f, 290.f, 0.f, 1.f);
 
+	makeImage("CAKE.png", 15, 15, 100.f, 641.f, 1.f, 1.f);
+
+
+	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
+		ECS::SetIsGraphOne(entity, true);
 
 		//Add components
 		ECS::AttachComponent<Sprite>(entity);
 		ECS::AttachComponent<Transform>(entity);
 
 		//Set up the components
-		std::string fileName = "sky.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 250, 950);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 290.f, 0.f));
+		std::string fileName = "Speed Graphs 1.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
+		ECS::GetComponent<Sprite>(entity).SetTransparency(0.f);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(85.f, 75.f, 4.f));
 	}
 	
-
-
-
-
 	
+	makeImage("Speed Graphs 1.png", 100, 60, 85.f, 75.f, 4.f, 0.f);
+
+
 
 	//Setup static GROUND
 	{
@@ -248,22 +254,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	}
 	//Setup static CAKE
-	{
-		/*Scene::CreateSprite(m_sceneReg, "CAKE.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
-		//Creates entity
-		auto entity = ECS::CreateEntity();
-
-		//Add components
-		ECS::AttachComponent<Sprite>(entity);
-		ECS::AttachComponent<Transform>(entity);
-
-		//Set up the components
-		std::string fileName = "CAKE.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 15, 15);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(1.f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(100.f, 641.f, 1.f));
-	}
 
 	//SLOOM entity
 	{
@@ -322,6 +312,7 @@ void PhysicsPlayground::Update()
 
 void PhysicsPlayground::KeyboardHold()
 {
+	auto& phys = ECS::GetComponent<Player>(MainEntities::MainPlayer());
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	isMoveing = false;
 	
@@ -389,6 +380,8 @@ void PhysicsPlayground::KeyboardHold()
 		vel += b2Vec2(50.f, 0.f);
 	}
 
+
+
 	if (isMoveing)
 	{
 		additionalSpeed+= 1;
@@ -423,13 +416,33 @@ void PhysicsPlayground::KeyboardHold()
 	}
 	
 	timerTwo += Timer::deltaTime;
-	std::cout << speed << ", " << timerTwo << "\n";
+	//std::cout << speed << ", " << timerTwo << "\n";
 	player.GetBody()->SetLinearVelocity(speed * vel);
 	//spare comment
+
+	if (Input::GetKey(Key::M))
+	{
+		phys.SetPhysicsState(false);
+	}
+
+	if (Input::GetKey(Key::P))
+	{
+		phys.SetPhysicsState(true);
+	}
 }
 
 void PhysicsPlayground::KeyboardDown()
 {
+	auto& image = ECS::GetComponent<Sprite>(MainEntities::GraphOne());
+	if (Input::GetKeyDown(Key::G))
+	{
+			image.SetTransparency(1.f);
+	}
+
+	if (Input::GetKeyDown(Key::H))
+	{
+			image.SetTransparency(0.f);
+	}
 }
 
 void PhysicsPlayground::KeyboardUp()
@@ -465,4 +478,21 @@ void PhysicsPlayground::makePlatform(int x, int y, int length)
 
 	tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
 
+}
+
+void PhysicsPlayground::makeImage(std::string fileName, float length, float width, float x, float y, float z, float transparency)
+{
+	/*Scene::CreateSprite(m_sceneReg, "CAKE.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
+
+		//Creates entity
+	auto entity = ECS::CreateEntity();
+
+	//Add components
+	ECS::AttachComponent<Sprite>(entity);
+	ECS::AttachComponent<Transform>(entity);
+
+	//Set up the components
+	ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, length, width);
+	ECS::GetComponent<Sprite>(entity).SetTransparency(transparency);
+	ECS::GetComponent<Transform>(entity).SetPosition(vec3(x, y, z));
 }

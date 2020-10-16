@@ -74,7 +74,10 @@ public:
 	void Update();
 	void MovementUpdate();
 	void AnimationUpdate();
+	void SetPhysicsState(int physics);
 
+	int GetPhysicsState();
+	
 private:
 	void SetActiveAnimation(int anim);
 
